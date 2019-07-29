@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "terrestrium",
+  "version": "${version}",
+  "name": "Terrestrium",
+  "description": "An extensive entities mod that adds all kinda of living creatures to your game, best suited to play with Terrestria",
+  "authors": [
+    "NeusFear"
+  ],
+  "contact": {
+    "sources": "https://github.com/TerraformersMC/Terrestrium",
+    "issues": "https://github.com/TerraformersMC/Terrestrium/issues"
+  },
+  "license": "LGPL-3.0-only",
+  "icon": "assets/terrestrium/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.terraformersmc.terrestrium.Terrestrium"
+    ],
+    "client": [
+      "com.terraformersmc.terrestrium.TerrestriumClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*",
+    "terraform": "*"
+  },
+  "mixins": [
+    "mixins.terrestrium.json"
+  ]
+}

@@ -1,3 +1,28 @@
+# gradle
+.gradle/
+build/
+out/
+classes/
+
+# Idea
+./.idea
+*.iml
+*.ipr
+*.iws
+
+# vscode
+.settings/
+.vscode/
+bin/
+.classpath
+.project
+
+# eclipse
+*.launch
+
+# fabric
+run/
+
 # Compiled class file
 *.class
 
