@@ -1,4 +1,4 @@
-package com.terraformersmc.terrestrium.entities;
+package com.terraformersmc.terrestrium.entities.worm;
 
 import net.minecraft.client.model.Cuboid;
 import net.minecraft.client.render.entity.model.EntityModel;

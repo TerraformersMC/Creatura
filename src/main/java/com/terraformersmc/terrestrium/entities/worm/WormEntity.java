@@ -1,4 +1,4 @@
-package com.terraformersmc.terrestrium.entities;
+package com.terraformersmc.terrestrium.entities.worm;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.PassiveEntity;

@@ -1,4 +1,4 @@
-package com.terraformersmc.terrestrium.entities;
+package com.terraformersmc.terrestrium.entities.worm;
 
 import com.terraformersmc.terrestrium.Terrestrium;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
