@@ -1,7 +1,6 @@
 package com.terraformersmc.terrestrium;
 
 import com.terraformersmc.terrestrium.entities.roadrunner.RoadrunnerEntity;
-import com.terraformersmc.terrestrium.entities.worm.WormEntity;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder;
@@ -20,12 +19,6 @@ public class Terrestrium implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		ITEM_GROUP = FabricItemGroupBuilder.build(new Identifier(MOD_ID, "items"), () -> new ItemStack(Items.EGG));
-
-		Registry.register(
-			Registry.ENTITY_TYPE,
-			new Identifier(Terrestrium.MOD_ID, "worm"),
-			FabricEntityTypeBuilder.create(EntityCategory.AMBIENT, WormEntity::new).size(EntityDimensions.fixed(1, 1)).build()
-		);
 
 		Registry.register(
 			Registry.ENTITY_TYPE,
