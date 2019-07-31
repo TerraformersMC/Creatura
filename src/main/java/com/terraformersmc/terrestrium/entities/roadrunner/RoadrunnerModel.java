@@ -1,14 +1,13 @@
 package com.terraformersmc.terrestrium.entities.roadrunner;
 
+import com.terraformersmc.terrestrium.entities.AnimatedModel;
 import net.minecraft.client.model.Cuboid;
-import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.entity.Entity;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
 
-public class RoadrunnerModel<T extends Entity> extends EntityModel<T> {
+public class RoadrunnerModel extends AnimatedModel {
 	public Cuboid body;
 	public Cuboid neck;
 	public Cuboid tail_base;
@@ -20,11 +19,6 @@ public class RoadrunnerModel<T extends Entity> extends EntityModel<T> {
 	public Cuboid beak;
 	public Cuboid head_feathers;
 	public Cuboid tail_feathers_middle;
-
-	//Animation stuff
-	private final Map<Entity, Map<Cuboid, float[]>> snapshotMap = new WeakHashMap<>();
-	private final Map<Entity, Map<Cuboid, float[]>> currentTransformsMap = new WeakHashMap<>();
-	private Map<Entity, String> snapshotName = new WeakHashMap<>();
 
 	public RoadrunnerModel() {
 		this.textureWidth = 64;
@@ -86,55 +80,33 @@ public class RoadrunnerModel<T extends Entity> extends EntityModel<T> {
 	}
 
 	@Override
-	public void setAngles(T entity_1, float float_1, float float_2, float float_3, float float_4, float float_5, float float_6) {
-		playAnimationWalk(entity_1, entity_1.age);
-	}
-
-	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		this.body.render(f5);
 	}
 
-	//Animation helpers
-	private void ensureSnapshot(Entity entity, String snapshotName) {
-		if (snapshotName.equals(this.snapshotName.get(entity))) {
-			return;
+	@Override
+	public void setAngles(Entity entity_1, float float_1, float float_2, float float_3, float float_4, float float_5, float float_6) {
+		playAnimationWalk(entity_1, entity_1.age);
+	}
+
+	@Override
+	protected void stopAnimation(Entity entity, float ticksDone) {
+		final float duration = 2.5F; //This is the time taken (in ticks) to get back to the idle pose
+		if(ticksDone < duration) {
+			float percentage = ticksDone / duration;
+			this.setTransforms(entity, this.beak, 0F, 0.6F, -0.3F, 10.43F, 0F, 0F, percentage);
+			this.setTransforms(entity, this.head_feathers, 0F, 0.5F, 0F, -20.87F, 0F, 0F, percentage);
+			this.setTransforms(entity, this.head, 0F, -0.3F, -3F, -31.3F, 0F, 0F, percentage);
+			this.setTransforms(entity, this.neck, 1.5F, 0.7F, 0.3F, -49.57F, 0F, 0F, percentage);
+			this.setTransforms(entity, this.tail_feathers_middle, 0F, 0F, 0.9F, 23.48F, 0F, 0F, percentage);
+			this.setTransforms(entity, this.tail_base, 1.5F, 0.4F, 4F, 20.87F, 0F, 0F, percentage);
+			this.setTransforms(entity, this.wing_left, 2F, 0F, 0F, 0F, 0F, -12F, percentage);
+			this.setTransforms(entity, this.wing_right, 0.3F, -0.1F, 0F, 0F, 0F, 12F, percentage);
+			this.setTransforms(entity, this.leg_left, 0F, 2F, 3F, 24F, 0F, 0F, percentage);
+			this.setTransforms(entity, this.leg_right, 3F, 2F, 3F, 24F, 0F, 0F, percentage);
+			this.setTransforms(entity, this.body, -1F, 17F, -2.5F, -24F, 0F, 0F, percentage);
 		}
-		this.snapshotName.put(entity, snapshotName);
-		Map<Cuboid, float[]> rendererMap = snapshotMap.get(entity);
-		Map<Cuboid, float[]> transformsMap = this.currentTransformsMap.get(entity);
-		for (Cuboid renderer : this.cuboidList) {
-			float[] floats = transformsMap.get(renderer);
-			rendererMap.put(renderer, new float[]{floats[0], floats[1], floats[2], floats[3], floats[4], floats[5]});
-		}
 	}
-
-	private void setTransforms(Entity entity, Cuboid modelRenderer, float positionX, float positionY, float positionZ, float rotateX, float rotateY, float rotateZ, float alpha) {
-		final float[] snapshot = this.snapshotMap.get(entity).get(modelRenderer);
-		final float[] currentTransforms = this.currentTransformsMap.get(entity).get(modelRenderer);
-
-		currentTransforms[0] = snapshot[0] + (positionX - snapshot[0]) * alpha;
-		currentTransforms[1] = snapshot[1] + (positionY - snapshot[1]) * alpha;
-		currentTransforms[2] = snapshot[2] + (positionZ - snapshot[2]) * alpha;
-
-		currentTransforms[3] = snapshot[3] + (rotateX - snapshot[3]) * alpha;
-		currentTransforms[4] = snapshot[4] + (rotateY - snapshot[4]) * alpha;
-		currentTransforms[5] = snapshot[5] + (rotateZ - snapshot[5]) * alpha;
-	}
-
-	private void applyAnimations(Entity entity) {
-		Map<Cuboid, float[]> rendererMap = this.currentTransformsMap.get(entity);
-		rendererMap.forEach((renderer, dat) -> {
-			renderer.rotationPointX = dat[0];
-			renderer.rotationPointY = dat[1];
-			renderer.rotationPointZ = dat[2];
-
-			renderer.pitch = dat[3];
-			renderer.yaw = dat[4];
-			renderer.roll = dat[5];
-		});
-	}
-
 
 	/**
 	 * Play the animation {@code walk}, which is 10 ticks long
@@ -143,14 +115,14 @@ public class RoadrunnerModel<T extends Entity> extends EntityModel<T> {
 	 * This method is generated from DumbCode Animation Studio v0.3.9
 	 */
 	private void playAnimationWalk(Entity entity, float ticksDone) {
-		if(!this.snapshotMap.containsKey(entity)) {
-			this.snapshotMap.put(entity, new HashMap<>());
+		if(!this.getSnapshotMap().containsKey(entity)) {
+			this.getSnapshotMap().put(entity, new HashMap<>());
 
 			Map<Cuboid, float[]> map = new HashMap<>();
 			for (Cuboid cuboid : this.cuboidList) {
 				map.put(cuboid, new float[6]);
 			}
-			this.currentTransformsMap.put(entity, map);
+			this.getCurrentTransformsMap().put(entity, map);
 		}
 		ticksDone %= 5;  //Comment this for the animation NOT to loop
 		if (ticksDone > 0) {
@@ -182,23 +154,5 @@ public class RoadrunnerModel<T extends Entity> extends EntityModel<T> {
 		}
 
 		this.applyAnimations(entity);
-	}
-
-	private void stopAnimation(Entity entity, float ticksDone) {
-		final float duration = 2.5F; //This is the time taken (in ticks) to get back to the idle pose
-		if(ticksDone < duration) {
-			float percentage = ticksDone / duration;
-			this.setTransforms(entity, this.beak, 0F, 0.6F, -0.3F, 10.43F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.head_feathers, 0F, 0.5F, 0F, -20.87F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.head, 0F, -0.3F, -3F, -31.3F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.neck, 1.5F, 0.7F, 0.3F, -49.57F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.tail_feathers_middle, 0F, 0F, 0.9F, 23.48F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.tail_base, 1.5F, 0.4F, 4F, 20.87F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.wing_left, 2F, 0F, 0F, 0F, 0F, -12F, percentage);
-			this.setTransforms(entity, this.wing_right, 0.3F, -0.1F, 0F, 0F, 0F, 12F, percentage);
-			this.setTransforms(entity, this.leg_left, 0F, 2F, 3F, 24F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.leg_right, 3F, 2F, 3F, 24F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.body, -1F, 17F, -2.5F, -24F, 0F, 0F, percentage);
-		}
 	}
 }
