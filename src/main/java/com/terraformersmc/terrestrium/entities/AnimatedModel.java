@@ -23,7 +23,7 @@ public abstract class AnimatedModel<T extends Entity> extends EntityModel<T> {
 	}
 
 	@Override
-	public abstract void setAngles(T entity_1, float float_1, float float_2, float float_3, float float_4, float float_5, float float_6);
+	public abstract void setAngles(Entity entity, float float_1, float float_2, float float_3, float float_4, float float_5, float float_6);
 
 	protected abstract void stopAnimation(Entity entity, float ticksDone);
 

@@ -86,12 +86,18 @@ public class RoadrunnerModel extends AnimatedModel {
 
 	@Override
 	public void setAngles(Entity entity_1, float float_1, float float_2, float float_3, float float_4, float float_5, float float_6) {
-		playAnimationWalk(entity_1, entity_1.age);
+		if (((RoadrunnerEntity) entity_1).isWalking()) {
+			playAnimationWalk(entity_1, float_3 * 2);
+		} else if (entity_1.isInsideWater()) {
+			playAnimationWalk(entity_1, float_3);
+		} else {
+			stopAnimation(entity_1, float_3);
+		}
 	}
 
 	@Override
 	protected void stopAnimation(Entity entity, float ticksDone) {
-		final float duration = 2.5F; //This is the time taken (in ticks) to get back to the idle pose
+		final float duration = 5F; //This is the time taken (in ticks) to get back to the idle pose
 		if(ticksDone < duration) {
 			float percentage = ticksDone / duration;
 			this.setTransforms(entity, this.beak, 0F, 0.6F, -0.3F, 10.43F, 0F, 0F, percentage);
@@ -124,10 +130,10 @@ public class RoadrunnerModel extends AnimatedModel {
 			}
 			this.getCurrentTransformsMap().put(entity, map);
 		}
-		ticksDone %= 5;  //Comment this for the animation NOT to loop
+		ticksDone %= 10;  //Comment this for the animation NOT to loop
 		if (ticksDone > 0) {
-			float percentage = (ticksDone - 0F) / 2.5F;
-			if(ticksDone < 2.5) this.ensureSnapshot(entity, "walk0");
+			float percentage = (ticksDone - 0F) / 5F;
+			if(ticksDone < 5) this.ensureSnapshot(entity, "walk0");
 			else percentage = 1F;
 			this.setTransforms(entity, this.beak, 0F, 0.6F, -0.3F, 0.182F, 0F, 0F, percentage);
 			this.setTransforms(entity, this.head_feathers, 0F, 0.5F, 0F, -0.364F, 0F, 0F, percentage);
@@ -141,9 +147,9 @@ public class RoadrunnerModel extends AnimatedModel {
 			this.setTransforms(entity, this.leg_right, 3F, 2F, 3F, -0.785F, 0F, 0F, percentage);
 			this.setTransforms(entity, this.body, -1F, 17.4F, -2.5F, -0.054F, 0F, 0F, percentage);
 		}
-		if (ticksDone > 2.5) {
-			float percentage = (ticksDone - 2.5F) / 2.5F;
-			if(ticksDone < 5) this.ensureSnapshot(entity, "walk1");
+		if (ticksDone > 5) {
+			float percentage = (ticksDone - 5F) / 5F;
+			if(ticksDone < 10) this.ensureSnapshot(entity, "walk1");
 			else percentage = 1F;
 			this.setTransforms(entity, this.head, 0F, -0.3F, -3F, -0.686F, 0F, 0F, percentage);
 			this.setTransforms(entity, this.neck, 1.5F, 0.7F, 0.3F, -0.578F, 0F, 0F, percentage);
