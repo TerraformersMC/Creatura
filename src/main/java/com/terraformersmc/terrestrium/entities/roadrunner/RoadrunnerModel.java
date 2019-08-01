@@ -85,14 +85,19 @@ public class RoadrunnerModel extends AnimatedModel {
 	}
 
 	@Override
-	public void setAngles(Entity entity_1, float float_1, float float_2, float float_3, float float_4, float float_5, float float_6) {
-		if (((RoadrunnerEntity) entity_1).isWalking()) {
+	public void animateModel(Entity entity_1, float float_1, float float_2, float float_3) {
+		if (entity_1.getVelocity().x > 0 || entity_1.getVelocity().y > 0 || entity_1.getVelocity().z > 0) {
 			playAnimationWalk(entity_1, float_3 * 2);
-		} else if (entity_1.isInsideWater()) {
+		} else if (entity_1.isInsideWater() && (entity_1.getVelocity().x > 0 || entity_1.getVelocity().y > 0 || entity_1.getVelocity().z > 0)) {
 			playAnimationWalk(entity_1, float_3);
 		} else {
 			stopAnimation(entity_1, float_3);
 		}
+	}
+
+	@Override
+	public void setAngles(Entity entity, float float_1, float float_2, float float_3, float float_4, float float_5, float float_6) {
+
 	}
 
 	@Override
