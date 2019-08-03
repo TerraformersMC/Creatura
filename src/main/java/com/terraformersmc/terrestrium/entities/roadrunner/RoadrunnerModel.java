@@ -83,18 +83,14 @@ public class RoadrunnerModel extends AnimatedModel {
 
 	@Override
 	protected void runAnimations(Entity entity, float partialTicks) {
-		if (entity.getVelocity().x > 0 || entity.getVelocity().y > 0 || entity.getVelocity().z > 0) {
-			this.playAnimationWalk(entity, this.getTicksDone(entity, partialTicks) * 2);
-		} else if (entity.isInsideWater() && (entity.getVelocity().x > 0 || entity.getVelocity().y > 0 || entity.getVelocity().z > 0)) {
-			this.playAnimationWalk(entity, this.getTicksDone(entity, partialTicks) * 2);
+		if (entity.getVelocity().getX() != 0.0 || entity.getVelocity().getZ() != 0.0) {
+			if (entity.isInsideWater()) {
+				this.playAnimationWalk(entity, this.getTicksDone(entity, partialTicks));
+			}
+			this.playAnimationWalk(entity, this.getTicksDone(entity, partialTicks * 2));
 		} else {
 			this.stopAnimation(entity, this.getTicksDone(entity, partialTicks));
 		}
-	}
-
-	@Override
-	public void setAngles(Entity entity, float float_1, float float_2, float float_3, float float_4, float float_5, float float_6) {
-		runAnimations(entity, float_3);
 	}
 
 	/**
@@ -127,6 +123,8 @@ public class RoadrunnerModel extends AnimatedModel {
 			else percentage = 1F;
 			this.setTransforms(entity, this.neck, 1.5F, 0.7F, 0.3F, -0.262F, 0F, 0F, percentage);
 			this.setTransforms(entity, this.tail_feathers_middle, 0F, 0F, 0.9F, -0.087F, 0F, 0F, percentage);
+			this.setTransforms(entity, this.leg_left, 0F, 2F, 3F, 0.785F, 0F, 0F, percentage);
+			this.setTransforms(entity, this.leg_right, 3F, 2F, 3F, -0.785F, 0F, 0F, percentage);
 		}
 
 	}

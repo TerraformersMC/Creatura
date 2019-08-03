@@ -1,9 +1,12 @@
 package com.terraformersmc.terrestrium.entities.roadrunner;
 
 import com.sun.istack.internal.Nullable;
+import com.terraformersmc.terrestrium.entities.TerrestriumPassiveEntity;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.TargetPredicate;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityData;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnType;
 import net.minecraft.entity.ai.control.MoveControl;
 import net.minecraft.entity.ai.goal.FleeEntityGoal;
 import net.minecraft.entity.ai.goal.Goal;
@@ -14,8 +17,6 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.passive.FoxEntity;
-import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
@@ -31,7 +32,7 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-public class RoadrunnerEntity extends PassiveEntity {
+public class RoadrunnerEntity extends TerrestriumPassiveEntity {
 
 	private static final TrackedData<Integer> TYPE;
 	private static final TrackedData<Byte> ROADRUNNER_FLAGS;
@@ -41,7 +42,6 @@ public class RoadrunnerEntity extends PassiveEntity {
 		super(entityType_1, world_1);
 		this.moveControl = new RoadrunnerEntity.RoadrunnerMoveControl();
 		this.setPathNodeTypeWeight(PathNodeType.DANGER_OTHER, 0.0F);
-		this.setPathNodeTypeWeight(PathNodeType.DAMAGE_OTHER, 0.0F);
 	}
 
 	protected void initDataTracker() {
@@ -65,13 +65,9 @@ public class RoadrunnerEntity extends PassiveEntity {
 			this.forwardSpeed = 0.0F;
 			this.field_6267 = 0.0F;
 		}
-
 		super.tickMovement();
 	}
 
-	protected boolean cannotMove() {
-		return this.getHealth() <= 0.0F;
-	}
 
 	@Nullable
 	public EntityData initialize(IWorld iWorld_1, LocalDifficulty localDifficulty_1, SpawnType spawnType_1, @Nullable EntityData entityData_1, @Nullable CompoundTag compoundTag_1) {
@@ -88,6 +84,7 @@ public class RoadrunnerEntity extends PassiveEntity {
 		}
 	}
 
+	@Override
 	public boolean isWalking() {
 		return this.getRoadrunnerFlag(64);
 	}
@@ -107,10 +104,6 @@ public class RoadrunnerEntity extends PassiveEntity {
 
 	private boolean getRoadrunnerFlag(int int_1) {
 		return ((Byte)this.dataTracker.get(ROADRUNNER_FLAGS) & int_1) != 0;
-	}
-
-	public void tick() {
-		super.tick();
 	}
 
 	public void handleFallDamage(float float_1, float float_2) {
@@ -135,16 +128,10 @@ public class RoadrunnerEntity extends PassiveEntity {
 		}
 	}
 
-	private void stopActions() {
-		this.setWalking(false);
-	}
-
 	static {
 		TYPE = DataTracker.registerData(RoadrunnerEntity.class, TrackedDataHandlerRegistry.INTEGER);
 		ROADRUNNER_FLAGS = DataTracker.registerData(RoadrunnerEntity.class, TrackedDataHandlerRegistry.BYTE);
-		NOTICEABLE_PLAYER_FILTER = (entity_1) -> {
-			return !entity_1.isSneaking() && EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR.test(entity_1);
-		};
+		NOTICEABLE_PLAYER_FILTER = (entity_1) -> !entity_1.isSneaking() && EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR.test(entity_1);
 	}
 
 	class StopWanderingGoal extends Goal {
@@ -163,7 +150,7 @@ public class RoadrunnerEntity extends PassiveEntity {
 		}
 
 		public void start() {
-			this.timer = 40;
+			this.timer = 60;
 		}
 
 		public void stop() {
@@ -173,98 +160,5 @@ public class RoadrunnerEntity extends PassiveEntity {
 		public void tick() {
 			--this.timer;
 		}
-	}
-
-	class DelayedCalmDownGoal extends RoadrunnerEntity.CalmDownGoal {
-		private int timer;
-
-		public DelayedCalmDownGoal() {
-			super();
-			this.timer = RoadrunnerEntity.this.random.nextInt(140);
-			this.setControls(EnumSet.of(Control.MOVE, Control.LOOK, Control.JUMP));
-		}
-
-		public boolean canStart() {
-			if (RoadrunnerEntity.this.sidewaysSpeed == 0.0F && RoadrunnerEntity.this.upwardSpeed == 0.0F && RoadrunnerEntity.this.forwardSpeed == 0.0F) {
-				return this.canNotCalmDown();
-			} else {
-				return false;
-			}
-		}
-
-		public boolean shouldContinue() {
-			return this.canNotCalmDown();
-		}
-
-		private boolean canNotCalmDown() {
-			if (this.timer > 0) {
-				--this.timer;
-				return false;
-			} else {
-				return this.isAtFavoredLocation() && !this.canCalmDown();
-			}
-		}
-
-		public void stop() {
-			this.timer = RoadrunnerEntity.this.random.nextInt(140);
-			RoadrunnerEntity.this.stopActions();
-		}
-
-		public void start() {
-			RoadrunnerEntity.this.setJumping(false);
-			RoadrunnerEntity.this.getNavigation().stop();
-			RoadrunnerEntity.this.getMoveControl().moveTo(RoadrunnerEntity.this.x, RoadrunnerEntity.this.y, RoadrunnerEntity.this.z, 0.0D);
-		}
-	}
-
-	abstract class CalmDownGoal extends Goal {
-		private final TargetPredicate WORRIABLE_ENTITY_PREDICATE;
-
-		private CalmDownGoal() {
-			this.WORRIABLE_ENTITY_PREDICATE = (new TargetPredicate()).setBaseMaxDistance(12.0D).includeHidden().setPredicate(RoadrunnerEntity.this.new WorriableEntityFilter());
-		}
-
-		protected boolean isAtFavoredLocation() {
-			BlockPos blockPos_1 = new BlockPos(RoadrunnerEntity.this);
-			return RoadrunnerEntity.this.getPathfindingFavor(blockPos_1) >= 0.0F;
-		}
-
-		protected boolean canCalmDown() {
-			return !RoadrunnerEntity.this.world.getTargets(LivingEntity.class, this.WORRIABLE_ENTITY_PREDICATE, RoadrunnerEntity.this, RoadrunnerEntity.this.getBoundingBox().expand(12.0D, 6.0D, 12.0D)).isEmpty();
-		}
-	}
-
-	public class WorriableEntityFilter implements Predicate<LivingEntity> {
-		
-		public WorriableEntityFilter() {}
-		
-		@Override
-		public boolean test(LivingEntity livingEntity) {
-			if (livingEntity instanceof RoadrunnerEntity) {
-				return false;
-			} else {
-				if (livingEntity instanceof TameableEntity) {
-					return false;
-				} else if (livingEntity instanceof PlayerEntity && (livingEntity.isSpectator() || ((PlayerEntity)livingEntity).isCreative())) {
-					return false;
-				}
-				return true;
-			}
-		}
-	}
-
-	@Override
-	public PassiveEntity createChild(PassiveEntity passiveEntity) {
-		return null;
-	}
-
-	@Override
-	public void readCustomDataFromTag(CompoundTag compoundTag) {
-		super.readCustomDataFromTag(compoundTag);
-	}
-
-	@Override
-	public void writeCustomDataToTag(CompoundTag compoundTag) {
-		super.writeCustomDataToTag(compoundTag);
 	}
 }
