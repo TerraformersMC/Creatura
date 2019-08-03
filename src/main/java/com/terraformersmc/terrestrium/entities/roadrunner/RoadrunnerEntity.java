@@ -52,16 +52,10 @@ public class RoadrunnerEntity extends PassiveEntity {
 
 	protected void initGoals() {
 		this.goalSelector.add(1, new RoadrunnerEntity.StopWanderingGoal());
-		this.goalSelector.add(3, new FleeEntityGoal<>(this, PlayerEntity.class, 16.0F, 1.6D, 1.4D, (livingEntity_1) -> {
-			return NOTICEABLE_PLAYER_FILTER.test(livingEntity_1);
-		}));
-		this.goalSelector.add(3, new FleeEntityGoal<>(this, WolfEntity.class, 8.0F, 1.6D, 1.4D, (livingEntity_1) -> {
-			return !((WolfEntity)livingEntity_1).isTamed();
-		}));
-		this.goalSelector.add(3, new FleeEntityGoal<>(this, FoxEntity.class, 8.0F, 1.6D, 1.4D, (livingEntity_1) -> {
-			return !((WolfEntity)livingEntity_1).isTamed();
-		}));
-		this.goalSelector.add(10, new WanderAroundFarGoal(this, 1.0D));
+		this.goalSelector.add(3, new FleeEntityGoal<>(this, PlayerEntity.class, 16.0F, 0.8D, 1.4D, NOTICEABLE_PLAYER_FILTER::test));
+		this.goalSelector.add(3, new FleeEntityGoal<>(this, WolfEntity.class, 8.0F, 0.8D, 1.4D, (livingEntity_1) -> !((WolfEntity)livingEntity_1).isTamed()));
+		this.goalSelector.add(3, new FleeEntityGoal<>(this, FoxEntity.class, 8.0F, 0.8D, 1.4D, (livingEntity_1) -> !livingEntity_1.isSleeping()));
+		this.goalSelector.add(10, new WanderAroundFarGoal(this, 0.8D));
 	}
 
 	public void tickMovement() {
