@@ -157,4 +157,11 @@ public abstract class AnimatedModel<T extends Entity> extends EntityModel<T> {
 			}
 		}
 	}
+
+	//Model helper class for setting rotations of the original model.
+	public void setRotateAngle(Cuboid cuboid, float x, float y, float z) {
+		cuboid.pitch = x;
+		cuboid.yaw = y;
+		cuboid.roll = z;
+	}
 }

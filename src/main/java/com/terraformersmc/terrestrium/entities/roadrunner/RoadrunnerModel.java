@@ -92,12 +92,6 @@ public class RoadrunnerModel extends AnimatedModel {
 		}
 	}
 
-	public void setRotateAngle(Cuboid cuboid, float x, float y, float z) {
-		cuboid.pitch = x;
-		cuboid.yaw = y;
-		cuboid.roll = z;
-	}
-
 	@Override
 	public void setAngles(Entity entity, float float_1, float float_2, float float_3, float float_4, float float_5, float float_6) {
 		runAnimations(entity, float_3);
