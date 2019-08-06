@@ -1,10 +1,10 @@
 package com.terraformersmc.terrestrium.entities.roadrunner;
 
+import com.terraformersmc.terrestrium.entities.AnimatedEntityEntry;
 import com.terraformersmc.terrestrium.entities.AnimatedModel;
 import net.minecraft.client.model.Cuboid;
-import net.minecraft.entity.Entity;
 
-public class RoadrunnerModel extends AnimatedModel {
+public class RoadrunnerModel extends AnimatedModel<RoadrunnerEntity> {
 	public Cuboid body;
 	public Cuboid neck;
 	public Cuboid tail_base;
@@ -77,55 +77,67 @@ public class RoadrunnerModel extends AnimatedModel {
 	}
 
 	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-		this.body.render(f5);
-	}
-
-	@Override
-	protected void runAnimations(Entity entity, float partialTicks) {
-		if (entity.getVelocity().getX() != 0.0 || entity.getVelocity().getZ() != 0.0) {
-			if (entity.isInsideWater()) {
-				this.playAnimationWalk(entity, this.getTicksDone(entity, partialTicks));
-			}
-			this.playAnimationWalk(entity, this.getTicksDone(entity, partialTicks * 2));
-		} else {
-			this.stopAnimation(entity, this.getTicksDone(entity, partialTicks));
-		}
+	public void render(RoadrunnerEntity entity_1, float float_1, float float_2, float float_3, float float_4, float float_5, float float_6) {
+		this.body.render(float_6);
 	}
 
 	/**
 	 * Play the animation {@code walk}, which is 10 ticks long
-	 * @param entity The entity to run the animation on
-	 * @param ticksDone the amount of ticks that this animation has been running for. Doesn't have to start at 0
+	 * @param entry The entry to run the animation on
+	 * @param ticksDone the amount of ticks that this animation has been running for. This doesn't have to start at 0
 	 * This method is generated from DumbCode Animation Studio v0.3.9
 	 */
-	private void playAnimationWalk(Entity entity, float ticksDone) {
-		ticksDone %= 10;  //Loops the animation
+	private void playAnimationWalk(AnimatedEntityEntry entry, float ticksDone) {
+		ticksDone %= 10;  //Comment this for the animation NOT to loop
+
+		int snapshotID;
+		if(ticksDone < 5) snapshotID = 0;
+		else snapshotID = 1;
+		entry.ensureSnapshot("walk", snapshotID);
+
 		if (ticksDone > 0) {
 			float percentage = (ticksDone - 0F) / 5F;
-			if(ticksDone < 5) this.ensureSnapshot(entity, "walk", 0);
-			else percentage = 1F;
-			this.setTransforms(entity, this.beak, 0F, 0.6F, -0.3F, 0.182F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.head_feathers, 0F, 0.5F, 0F, -0.364F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.head, 0F, -0.3F, -2.5F, -1.309F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.neck, 1.5F, 0.7F, 0.3F, -0.175F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.tail_feathers_middle, 0F, 0F, 0.9F, 0F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.tail_base, 1.5F, 0.4F, 4F, 0F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.wing_left, 2F, 0F, 0F, 0F, 0F, -0.209F, percentage);
-			this.setTransforms(entity, this.wing_right, 0.3F, -0.1F, 0F, 0F, 0F, 0.209F, percentage);
-			this.setTransforms(entity, this.leg_left, 0F, 2F, 3F, -0.785F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.leg_right, 3F, 2F, 3F, 0.785F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.body, -1F, 18F, -2.5F, 0F, 0F, 0F, percentage);
+			if(percentage > 1F) percentage = 1F;
+			entry.setTransforms(this.beak, 0F, 0.6F, -0.3F, 0.182F, 0F, 0F, percentage);
+			entry.setTransforms(this.head_feathers, 0F, 0.5F, 0F, -0.364F, 0F, 0F, percentage);
+			entry.setTransforms(this.head, 0F, -0.3F, -2.5F, -1.309F, 0F, 0F, percentage);
+			entry.setTransforms(this.neck, 1.5F, 0.7F, 0.3F, -0.175F, 0F, 0F, percentage);
+			entry.setTransforms(this.tail_feathers_middle, 0F, 0F, 0.9F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.tail_base, 1.5F, 0.4F, 4F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.wing_left, 2F, 0F, 0F, 0F, 0F, -0.209F, percentage);
+			entry.setTransforms(this.wing_right, 0.3F, -0.1F, 0F, 0F, 0F, 0.209F, percentage);
+			entry.setTransforms(this.leg_left, 0F, 2F, 3F, -0.785F, 0F, 0F, percentage);
+			entry.setTransforms(this.leg_right, 3F, 2F, 3F, 0.785F, 0F, 0F, percentage);
+			entry.setTransforms(this.body, -1F, 18F, -2.5F, 0F, 0F, 0F, percentage);
 		}
 		if (ticksDone > 5) {
 			float percentage = (ticksDone - 5F) / 5F;
-			if(ticksDone < 10) this.ensureSnapshot(entity, "walk", 1);
-			else percentage = 1F;
-			this.setTransforms(entity, this.neck, 1.5F, 0.7F, 0.3F, -0.262F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.tail_feathers_middle, 0F, 0F, 0.9F, -0.087F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.leg_left, 0F, 2F, 3F, 0.785F, 0F, 0F, percentage);
-			this.setTransforms(entity, this.leg_right, 3F, 2F, 3F, -0.785F, 0F, 0F, percentage);
+			if(percentage > 1F) percentage = 1F;
+			entry.setTransforms(this.neck, 1.5F, 0.7F, 0.3F, -0.262F, 0F, 0F, percentage);
+			entry.setTransforms(this.tail_feathers_middle, 0F, 0F, 0.9F, -0.087F, 0F, 0F, percentage);
+			entry.setTransforms(this.leg_left, 0F, 2F, 3F, 0.785F, 0F, 0F, percentage);
+			entry.setTransforms(this.leg_right, 3F, 2F, 3F, -0.785F, 0F, 0F, percentage);
 		}
 
+	}
+
+	@Override
+	protected void runAnimations(RoadrunnerEntity entity, AnimatedEntityEntry entry, float partialTicks) {
+		if (entity.getVelocity().getX() != 0.0 || entity.getVelocity().getZ() != 0.0) {
+			if (entity.isInsideWater()) {
+				this.playAnimationWalk(entry, entry.getTicksDone(partialTicks));
+			}
+			this.playAnimationWalk(entry, entry.getTicksDone(partialTicks * 2));
+		} else {
+			this.stopAnimation(entry, entry.getTicksDone(partialTicks));
+		}
+	}
+
+	@Override
+	protected AnimatedEntityEntry getEntry(RoadrunnerEntity entity) {
+		if(entity.entry == null) {
+			entity.entry = new AnimatedEntityEntry(entity, this.defaultMap);
+		}
+		return entity.entry;
 	}
 }

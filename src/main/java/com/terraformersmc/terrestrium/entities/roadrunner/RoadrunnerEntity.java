@@ -1,6 +1,7 @@
 package com.terraformersmc.terrestrium.entities.roadrunner;
 
 import com.sun.istack.internal.Nullable;
+import com.terraformersmc.terrestrium.entities.AnimatedEntityEntry;
 import com.terraformersmc.terrestrium.entities.TerrestriumPassiveEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -37,6 +38,8 @@ public class RoadrunnerEntity extends TerrestriumPassiveEntity {
 	private static final TrackedData<Integer> TYPE;
 	private static final TrackedData<Byte> ROADRUNNER_FLAGS;
 	private static final Predicate<Entity> NOTICEABLE_PLAYER_FILTER;
+
+	protected AnimatedEntityEntry entry;
 
 	public RoadrunnerEntity(EntityType<? extends RoadrunnerEntity> entityType_1, World world_1) {
 		super(entityType_1, world_1);
