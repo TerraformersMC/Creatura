@@ -1,6 +1,7 @@
 package com.terraformersmc.terrestrium.init;
 
 import com.terraformersmc.terrestrium.Terrestrium;
+import com.terraformersmc.terrestrium.entities.crocodile.CrocodileEntity;
 import com.terraformersmc.terrestrium.entities.roadrunner.RoadrunnerEntity;
 import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.Entity;
@@ -12,9 +13,11 @@ import net.minecraft.util.registry.Registry;
 
 public class TerrestriumEntities {
 
+	public static EntityType CROCODILE;
 	public static EntityType ROADRUNNER;
 
 	public static void register() {
+		CROCODILE = register("crocodile", EntityCategory.CREATURE, CrocodileEntity::new, 1, 1);
 		ROADRUNNER = register("roadrunner", EntityCategory.CREATURE, RoadrunnerEntity::new, 1, 1);
 	}
 

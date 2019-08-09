@@ -10,10 +10,12 @@ import net.minecraft.util.registry.Registry;
 
 public class TerrestriumItems {
 
+	static Item CROCODILE_SPAWN_EGG;
 	static Item ROADRUNNER_SPAWN_EGG;
 
 	public static void register() {
 		ROADRUNNER_SPAWN_EGG = registerSpawnEgg("roadrunner", TerrestriumEntities.ROADRUNNER, 6905430, 13158598);
+		CROCODILE_SPAWN_EGG = registerSpawnEgg("crocodile", TerrestriumEntities.CROCODILE, 4616521, 10929577);
 	}
 
 	private static Item registerSpawnEgg(String name, EntityType entityType, int primaryColor, int secondaryColor) {
