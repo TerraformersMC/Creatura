@@ -1,4 +1,4 @@
-package com.terraformersmc.terrestrium.ai;
+package com.terraformersmc.terrestrium.ai.goals;
 
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.MobEntityWithAi;

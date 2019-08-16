@@ -1,6 +1,6 @@
 package com.terraformersmc.terrestrium.entities.roadrunner;
 
-import com.terraformersmc.terrestrium.ai.StopWanderingGoal;
+import com.terraformersmc.terrestrium.ai.goals.StopWanderingGoal;
 import com.terraformersmc.terrestrium.entities.AnimatedEntityEntry;
 import com.terraformersmc.terrestrium.entities.TerrestriumPassiveEntity;
 import net.minecraft.block.BlockState;

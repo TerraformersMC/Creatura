@@ -1,19 +1,20 @@
 package com.terraformersmc.terrestrium.entities.crocodile;
 
 import com.sun.istack.internal.Nullable;
-import com.terraformersmc.terrestrium.ai.StopWanderingGoal;
+import com.terraformersmc.terrestrium.ai.goals.StopWanderingGoal;
 import com.terraformersmc.terrestrium.entities.AnimatedEntityEntry;
 import com.terraformersmc.terrestrium.entities.TerrestriumWaterMob;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnType;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.control.MoveControl;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.goal.FollowTargetGoal;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sound.BlockSoundGroup;
@@ -28,8 +29,12 @@ import java.util.Iterator;
 public class CrocodileEntity extends TerrestriumWaterMob {
 
 	protected AnimatedEntityEntry entry;
+	private static final float MOVEMENT_SPEED = .45F;
+	private static final float SWIMMING_MOVEMENT_SPEED = 30.0F;
 
-	public CrocodileEntity(EntityType<? extends CrocodileEntity> entityType_1, World world_1) {
+	private static TrackedData<Boolean> MOVING;
+
+	public CrocodileEntity(EntityType<? extends WaterCreatureEntity> entityType_1, World world_1) {
 		super(entityType_1, world_1);
 		this.moveControl = new CrocodileMoveControl();
 	}
@@ -46,8 +51,14 @@ public class CrocodileEntity extends TerrestriumWaterMob {
 	protected void initAttributes() {
 		super.initAttributes();
 		this.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(20);
-		this.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
+		this.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).setBaseValue(MOVEMENT_SPEED);
 		this.getAttributeInstance(EntityAttributes.KNOCKBACK_RESISTANCE).setBaseValue(10.0D);
+	}
+
+	@Override
+	protected void initDataTracker() {
+		super.initDataTracker();
+		this.dataTracker.startTracking(MOVING, false);
 	}
 
 	public void tickMovement() {
@@ -57,12 +68,18 @@ public class CrocodileEntity extends TerrestriumWaterMob {
 			this.forwardSpeed = 0.0F;
 			this.field_6267 = 0.0F;
 		}
+		if (this.isInsideWater()) {
+
+		} else {
+			this.setMovementSpeed(MOVEMENT_SPEED);
+		}
 		super.tickMovement();
 	}
 
+
 	@Override
 	public float getPathfindingFavor(BlockPos blockPos_1) {
-		return world.getBlockState(blockPos_1.down()).getBlock() == Blocks.WATER ? 10.0F : world.getBrightness(blockPos_1) - 0.5F;
+		return world.getBlockState(blockPos_1.down(2)).getBlock() == Blocks.WATER ? 100.0F : world.getBrightness(blockPos_1) - 30.0F;
 	}
 
 	@Nullable
