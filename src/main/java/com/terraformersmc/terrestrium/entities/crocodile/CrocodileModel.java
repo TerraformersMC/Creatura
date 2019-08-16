@@ -1,10 +1,12 @@
 package com.terraformersmc.terrestrium.entities.crocodile;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.terraformersmc.terrestrium.entities.AnimatedEntityEntry;
 import com.terraformersmc.terrestrium.entities.AnimatedModel;
 import net.minecraft.client.model.Cuboid;
 
 public class CrocodileModel extends AnimatedModel<CrocodileEntity> {
+	public double[] modelScale = new double[] { 0.7D, 0.7D, 0.7D };
 	public Cuboid body_base;
 	public Cuboid body_chest;
 	public Cuboid hip;
@@ -55,7 +57,7 @@ public class CrocodileModel extends AnimatedModel<CrocodileEntity> {
 		this.tooth6_1.setRotationPoint(-1.8F, -1.0F, -5.0F);
 		this.tooth6_1.addBox(0.0F, 0.0F, 0.0F, 1, 2, 1, -0.2F);
 		this.body_base = new Cuboid(this, 1, 34);
-		this.body_base.setRotationPoint(-4.5F, 11.8F, 0.0F);
+		this.body_base.setRotationPoint(-4.5F, 3.8F, 0.0F);
 		this.body_base.addBox(0.0F, 0.0F, 0.0F, 9, 8, 10, 0.4F);
 		this.jaw = new Cuboid(this, 73, 19);
 		this.jaw.setRotationPoint(0.0F, 3.4F, -4.0F);
@@ -148,8 +150,11 @@ public class CrocodileModel extends AnimatedModel<CrocodileEntity> {
 	}
 
 	@Override
-	public void render(CrocodileEntity entity_1, float float_1, float float_2, float float_3, float float_4, float float_5, float float_6) {
-		this.body_base.render(float_6);
+	public void render(CrocodileEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+		GlStateManager.pushMatrix();
+		GlStateManager.scaled(1D / modelScale[0], 1D / modelScale[1], 1D / modelScale[2]);
+		this.body_base.render(f5);
+		GlStateManager.popMatrix();
 	}
 
 	@Override
