@@ -6,6 +6,7 @@ classes/
 
 # Idea
 ./.idea
+.idea/*
 *.iml
 *.ipr
 *.iws
