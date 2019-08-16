@@ -33,6 +33,4 @@ public abstract class TerrestriumPassiveEntity extends PassiveEntity {
 	public void writeCustomDataToTag(CompoundTag compoundTag) {
 		super.writeCustomDataToTag(compoundTag);
 	}
-
-	public abstract boolean isWalking();
 }
