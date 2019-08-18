@@ -16,6 +16,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.MobEntityWithAi;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.FishEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -48,16 +49,19 @@ public class CrocodileEntity extends AnimalEntity {
 	}
 
 	protected void initGoals() {
-		this.targetSelector.add(0, new FollowTargetGoal<PlayerEntity>(this, PlayerEntity.class, true));
+		this.targetSelector.add(0, new MeleeAttackGoal(this, 20, true));
+		this.targetSelector.add(1, new FollowTargetGoal<PlayerEntity>(this, PlayerEntity.class, true));
+		this.targetSelector.add(2, new FollowTargetGoal<FishEntity>(this, FishEntity.class, true));
 		this.goalSelector.add(3, new CrocodileEntity.WanderInWaterGoal(this, 1.0D, 100, this));
-		this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
-		this.goalSelector.add(9, new CrocodileEntity.WanderOnLandGoal(this, 1.0D, 100));
+		this.goalSelector.add(1, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
+		this.goalSelector.add(2, new CrocodileEntity.WanderOnLandGoal(this, 1.0D, 100));
 	}
 
 	protected void initAttributes() {
 		super.initAttributes();
 		this.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(30.0D);
 		this.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
+		this.getAttributeContainer().register(EntityAttributes.ATTACK_DAMAGE);
 	}
 
 	public boolean canFly() {
