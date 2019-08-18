@@ -7,6 +7,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.FleeEntityGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.ai.pathing.PathNodeType;
 import net.minecraft.entity.damage.DamageSource;
@@ -33,6 +34,7 @@ public class RoadrunnerEntity extends TerrestriumPassiveEntity {
 	}
 
 	protected void initGoals() {
+		this.goalSelector.add(0, new SwimGoal(this));
 		this.goalSelector.add(1, new WanderAroundFarGoal(this, 0.8D));
 		this.goalSelector.add(1, new StopWanderingGoal(this, 60));
 		this.goalSelector.add(2, new FleeEntityGoal<PlayerEntity>(this, PlayerEntity.class, 16.0F, 0.8D, 1.4D, NOTICEABLE_PLAYER_FILTER::test));
