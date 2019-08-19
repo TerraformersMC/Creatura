@@ -36,7 +36,6 @@ import net.minecraft.world.World;
 public class CrocodileEntity extends AnimalEntity {
 
 	protected AnimatedEntityEntry entry;
-	private boolean targeting;
 	private static final TrackedData<Boolean> ANGRY;
 
 	public CrocodileEntity(EntityType<? extends CrocodileEntity> entityType_1, World world_1) {
@@ -186,14 +185,6 @@ public class CrocodileEntity extends AnimalEntity {
 
 	public void onStruckByLightning(LightningEntity lightningEntity_1) {
 		this.damage(DamageSource.LIGHTNING_BOLT, 3.4028235E38F);
-	}
-
-	public boolean isTargeting() {
-		return targeting;
-	}
-
-	public void setTargeting(boolean targeting) {
-		this.targeting = targeting;
 	}
 
 	static class CrocodileSwimNavigation extends SwimNavigation {
