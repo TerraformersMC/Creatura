@@ -160,7 +160,7 @@ public class CrocodileModel extends AnimatedModel<CrocodileEntity> {
 	@Override
 	protected void runAnimations(CrocodileEntity entity, AnimatedEntityEntry entry, float partialTicks) {
 		if (entity.isInsideWater()) {
-			if (entity.getVelocity().getX() > 0.1 || entity.getVelocity().getZ() > 0.1) {
+			if (entity.getVelocity().getX() > 0.05 || entity.getVelocity().getZ() > 0.05 || entity.getVelocity().getX() < -0.05 || entity.getVelocity().getZ() < -0.05) {
 				if (entity.isAngry()) {
 					this.playAnimationSwimChomp(entry, entry.getTicksDone(partialTicks));
 				} else {
