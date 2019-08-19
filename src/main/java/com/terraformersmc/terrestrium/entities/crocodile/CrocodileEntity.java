@@ -1,7 +1,6 @@
 package com.terraformersmc.terrestrium.entities.crocodile;
 
 import com.sun.istack.internal.Nullable;
-import com.terraformersmc.terrestrium.ai.goals.CrocodileAttackGoal;
 import com.terraformersmc.terrestrium.entities.AnimatedEntityEntry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -14,6 +13,9 @@ import net.minecraft.entity.ai.pathing.PathNodeNavigator;
 import net.minecraft.entity.ai.pathing.SwimNavigation;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntityWithAi;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.FishEntity;
@@ -35,6 +37,7 @@ public class CrocodileEntity extends AnimalEntity {
 
 	protected AnimatedEntityEntry entry;
 	private boolean targeting;
+	private static final TrackedData<Boolean> ANGRY;
 
 	public CrocodileEntity(EntityType<? extends CrocodileEntity> entityType_1, World world_1) {
 		super(entityType_1, world_1);
@@ -42,14 +45,13 @@ public class CrocodileEntity extends AnimalEntity {
 		this.stepHeight = 1.0F;
 	}
 
-
 	@Nullable
 	public EntityData initialize(IWorld iWorld_1, LocalDifficulty localDifficulty_1, SpawnType spawnType_1, @Nullable EntityData entityData_1, @Nullable CompoundTag compoundTag_1) {
 		return super.initialize(iWorld_1, localDifficulty_1, spawnType_1, entityData_1, compoundTag_1);
 	}
 
 	protected void initGoals() {
-		this.targetSelector.add(0, new CrocodileAttackGoal(this, 20, true));
+		this.targetSelector.add(0, new MeleeAttackGoal(this, 20, true));
 		this.targetSelector.add(1, new FollowTargetGoal<PlayerEntity>(this, PlayerEntity.class, true));
 		this.targetSelector.add(2, new FollowTargetGoal<FishEntity>(this, FishEntity.class, true));
 		this.goalSelector.add(3, new CrocodileEntity.WanderInWaterGoal(this, 1.0D, 100, this));
@@ -62,6 +64,29 @@ public class CrocodileEntity extends AnimalEntity {
 		this.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(30.0D);
 		this.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
 		this.getAttributeContainer().register(EntityAttributes.ATTACK_DAMAGE);
+	}
+
+	protected void initDataTracker() {
+		super.initDataTracker();
+		this.dataTracker.startTracking(ANGRY, false);
+	}
+
+	@Override
+	public void setTarget(@Nullable LivingEntity livingEntity_1) {
+		super.setTarget(livingEntity_1);
+		if (livingEntity_1 == null) {
+			this.dataTracker.set(ANGRY, false);
+		} else {
+			this.dataTracker.set(ANGRY, true);
+		}
+	}
+
+	public boolean isAngry() {
+		return (Boolean)this.dataTracker.get(ANGRY);
+	}
+
+	static {
+		ANGRY = DataTracker.registerData(CrocodileEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 	}
 
 	public boolean canFly() {
