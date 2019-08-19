@@ -160,7 +160,15 @@ public class CrocodileModel extends AnimatedModel<CrocodileEntity> {
 	@Override
 	protected void runAnimations(CrocodileEntity entity, AnimatedEntityEntry entry, float partialTicks) {
 		if (entity.isInsideWater()) {
-			this.playAnimationIdle(entry, entry.getTicksDone(partialTicks));
+			if (entity.getVelocity().getX() > 0.1 || entity.getVelocity().getZ() > 0.1) {
+				if (entity.isTargeting()) {
+					this.playAnimationSwimChomp(entry, entry.getTicksDone(partialTicks));
+				} else {
+					this.playAnimationSwim(entry, entry.getTicksDone(partialTicks));
+				}
+			} else {
+				this.playAnimationIdle(entry, entry.getTicksDone(partialTicks));
+			}
 		} else {
 			this.stopAnimation(entry, entry.getTicksDone(partialTicks));
 		}
@@ -227,5 +235,144 @@ public class CrocodileModel extends AnimatedModel<CrocodileEntity> {
 			entry.setTransforms(this.leg_left, 3F, 6F, -1F, 0.698F, 0F, -0.349F, percentage);
 			entry.setTransforms(this.leg_right, -3F, 6F, -1F, 0.698F, 0F, 0.175F, percentage);
 		}
+	}
+
+	/**
+	 * Play the animation {@code swim}, which is 10 ticks long
+	 * @param entry The entry to run the animation on
+	 * @param ticksDone the amount of ticks that this animation has been running for. This doesn't have to start at 0
+	 * This method is generated from DumbCode Animation Studio v0.3.9
+	 */
+	private void playAnimationSwim(AnimatedEntityEntry entry, float ticksDone) {
+		ticksDone *= 1; //Speed of the animation
+		ticksDone %= 10;  //Loop the animation
+
+		int snapshotID;
+		if(ticksDone < 5) snapshotID = 0;
+		else snapshotID = 1;
+		entry.ensureSnapshot("swim", snapshotID);
+
+		if (ticksDone > 0) {
+			float percentage = (ticksDone - 0F) / 5F;
+			if(percentage > 1F) percentage = 1F;
+			entry.setTransforms(this.tooth5, -1.5F, -1F, -9.7F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.tooth6, -1.8F, -1F, -5F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.tooth7, 0.8F, 0F, -7.5F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.tooth8, -1.8F, -1F, -7.5F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.tooth9, 0.8F, -1F, -5F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.jaw, 0F, 3.4F, -4F, 0.175F, 0F, 0F, percentage);
+			entry.setTransforms(this.nose, 0F, -1.4F, -6F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.tooth1, 1F, -1F, -9F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.tooth2, -2F, -1F, -9F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.tooth3, -2F, -1F, -6F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.tooth4, 1F, -1F, -6F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.upper_jaw, 0F, 3.2F, -4.4F, 0.182F, 0F, 0F, percentage);
+			entry.setTransforms(this.head, 0F, 0.4F, -5.5F, -0.209F, -0.175F, 0F, percentage);
+			entry.setTransforms(this.collar, 0F, -1.2F, -9.3F, 0F, -0.175F, 0F, percentage);
+			entry.setTransforms(this.arm_left, 3F, 3F, -8F, -0.262F, 0F, 0F, percentage);
+			entry.setTransforms(this.arm_right, -3F, 3F, -8F, -0.262F, 0F, 0F, percentage);
+			entry.setTransforms(this.body_chest, 4.5F, 2F, 0.3F, 0.054F, -0.175F, 0F, percentage);
+			entry.setTransforms(this.tail_tip, 0F, 0.7F, 9.5F, 0.052F, -0.175F, 0F, percentage);
+			entry.setTransforms(this.tail_mid, -0.3F, 0.7F, 9.5F, 0.052F, -0.175F, 0F, percentage);
+			entry.setTransforms(this.tail_base, 0.3F, 0.5F, 9.5F, -0.091F, -0.175F, 0F, percentage);
+			entry.setTransforms(this.leg_left, 3F, 6F, -1F, 1.257F, 0F, 0F, percentage);
+			entry.setTransforms(this.leg_right, -3F, 6F, -1F, 1.257F, 0F, 0F, percentage);
+			entry.setTransforms(this.hip, 4.4F, 0.5F, 10F, -0.07F, 0F, 0F, percentage);
+			entry.setTransforms(this.body_base, -4.5F, 11.8F, 0F, 0F, 0.175F, 0F, percentage);
+		}
+		if (ticksDone > 5) {
+			float percentage = (ticksDone - 5F) / 5F;
+			if(percentage > 1F) percentage = 1F;
+			entry.setTransforms(this.head, 0F, 0.4F, -5.5F, -0.209F, 0.175F, 0F, percentage);
+			entry.setTransforms(this.collar, 0F, -1.2F, -9.3F, 0F, 0.175F, 0F, percentage);
+			entry.setTransforms(this.body_chest, 4.5F, 2F, 0.3F, 0.054F, 0.175F, 0F, percentage);
+			entry.setTransforms(this.tail_tip, 0F, 0.7F, 9.5F, 0.052F, 0.175F, 0F, percentage);
+			entry.setTransforms(this.tail_mid, -0.3F, 0.7F, 9.5F, 0.052F, 0.175F, 0F, percentage);
+			entry.setTransforms(this.tail_base, 0.3F, 0.5F, 9.5F, -0.091F, 0.175F, 0F, percentage);
+			entry.setTransforms(this.body_base, -4.5F, 11.8F, 0F, 0F, -0.175F, 0F, percentage);
+		}
+	}
+
+	/**
+	 * Play the animation {@code swimChomp}, which is 14 ticks long
+	 * @param entry The entry to run the animation on
+	 * @param ticksDone the amount of ticks that this animation has been running for. This doesn't have to start at 0
+	 * This method is generated from DumbCode Animation Studio v0.3.9
+	 */
+	private void playAnimationSwimChomp(AnimatedEntityEntry entry, float ticksDone) {
+		ticksDone *= 1; //Speed of the animation
+		ticksDone %= 14;  //Loop the animation
+
+		int snapshotID;
+		if(ticksDone < 5) snapshotID = 0;
+		else if(ticksDone < 7) snapshotID = 1;
+		else if(ticksDone < 12) snapshotID = 2;
+		else snapshotID = 3;
+		entry.ensureSnapshot("swimChomp", snapshotID);
+
+		if (ticksDone > 0) {
+			float percentage = (ticksDone - 0F) / 5F;
+			if(percentage > 1F) percentage = 1F;
+			entry.setTransforms(this.tooth5, -1.5F, -1F, -9.7F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.tooth6, -1.8F, -1F, -5F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.tooth7, 0.8F, 0F, -7.5F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.tooth8, -1.8F, -1F, -7.5F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.tooth9, 0.8F, -1F, -5F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.jaw, 0F, 3.4F, -4F, 0.175F, 0F, 0F, percentage);
+			entry.setTransforms(this.nose, 0F, -1.4F, -6F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.tooth1, 1F, -1F, -9F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.tooth2, -2F, -1F, -9F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.tooth3, -2F, -1F, -6F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.tooth4, 1F, -1F, -6F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.upper_jaw, 0F, 3.2F, -4.4F, -0.471F, 0F, 0F, percentage);
+			entry.setTransforms(this.head, 0F, 0.4F, -5.5F, -0.209F, -0.175F, 0F, percentage);
+			entry.setTransforms(this.collar, 0F, -1.2F, -9.3F, 0F, -0.175F, 0F, percentage);
+			entry.setTransforms(this.arm_left, 3F, 3F, -8F, -0.262F, 0F, 0F, percentage);
+			entry.setTransforms(this.arm_right, -3F, 3F, -8F, -0.262F, 0F, 0F, percentage);
+			entry.setTransforms(this.body_chest, 4.5F, 2F, 0.3F, 0.054F, -0.175F, 0F, percentage);
+			entry.setTransforms(this.tail_tip, 0F, 0.7F, 9.5F, 0.052F, -0.175F, 0F, percentage);
+			entry.setTransforms(this.tail_mid, -0.3F, 0.7F, 9.5F, 0.052F, -0.175F, 0F, percentage);
+			entry.setTransforms(this.tail_base, 0.3F, 0.5F, 9.5F, -0.091F, -0.175F, 0F, percentage);
+			entry.setTransforms(this.leg_left, 3F, 6F, -1F, 1.257F, 0F, 0F, percentage);
+			entry.setTransforms(this.leg_right, -3F, 6F, -1F, 1.257F, 0F, 0F, percentage);
+			entry.setTransforms(this.hip, 4.4F, 0.5F, 10F, -0.07F, 0F, 0F, percentage);
+			entry.setTransforms(this.body_base, -4.5F, 11.8F, 0F, 0F, 0.175F, 0F, percentage);
+		}
+		if (ticksDone > 5) {
+			float percentage = (ticksDone - 5F) / 2F;
+			if(percentage > 1F) percentage = 1F;
+			entry.setTransforms(this.upper_jaw, 0F, 3.2F, -4.4F, 0.185F, 0F, 0F, percentage);
+			entry.setTransforms(this.head, 0F, 0.4F, -5.5F, -0.209F, -0.262F, 0F, percentage);
+			entry.setTransforms(this.collar, 0F, -1.2F, -9.3F, 0F, -0.209F, 0F, percentage);
+			entry.setTransforms(this.body_chest, 4.5F, 2F, 0.3F, 0.054F, -0.209F, 0F, percentage);
+			entry.setTransforms(this.tail_tip, 0F, 0.7F, 9.5F, 0.052F, -0.209F, 0F, percentage);
+			entry.setTransforms(this.tail_mid, -0.3F, 0.7F, 9.5F, 0.052F, -0.209F, 0F, percentage);
+			entry.setTransforms(this.tail_base, 0.3F, 0.5F, 9.5F, -0.091F, -0.209F, 0F, percentage);
+			entry.setTransforms(this.body_base, -4.5F, 11.8F, 0F, 0F, 0.262F, 0F, percentage);
+		}
+		if (ticksDone > 7) {
+			float percentage = (ticksDone - 7F) / 5F;
+			if(percentage > 1F) percentage = 1F;
+			entry.setTransforms(this.upper_jaw, 0F, 3.2F, -4.4F, -0.471F, 0F, 0F, percentage);
+			entry.setTransforms(this.head, 0F, 0.4F, -5.5F, -0.209F, 0.175F, 0F, percentage);
+			entry.setTransforms(this.collar, 0F, -1.2F, -9.3F, 0F, 0.175F, 0F, percentage);
+			entry.setTransforms(this.body_chest, 4.5F, 2F, 0.3F, 0.054F, 0.175F, 0F, percentage);
+			entry.setTransforms(this.tail_tip, 0F, 0.7F, 9.5F, 0.052F, 0.175F, 0F, percentage);
+			entry.setTransforms(this.tail_mid, -0.3F, 0.7F, 9.5F, 0.052F, 0.175F, 0F, percentage);
+			entry.setTransforms(this.tail_base, 0.3F, 0.5F, 9.5F, -0.091F, 0.175F, 0F, percentage);
+			entry.setTransforms(this.body_base, -4.5F, 11.8F, 0F, 0F, -0.175F, 0F, percentage);
+		}
+		if (ticksDone > 12) {
+			float percentage = (ticksDone - 12F) / 2F;
+			if(percentage > 1F) percentage = 1F;
+			entry.setTransforms(this.upper_jaw, 0F, 3.2F, -4.4F, 0.185F, 0F, 0F, percentage);
+			entry.setTransforms(this.head, 0F, 0.4F, -5.5F, -0.209F, 0.262F, 0F, percentage);
+			entry.setTransforms(this.collar, 0F, -1.2F, -9.3F, 0F, 0.209F, 0F, percentage);
+			entry.setTransforms(this.body_chest, 4.5F, 2F, 0.3F, 0.054F, 0.209F, 0F, percentage);
+			entry.setTransforms(this.tail_tip, 0F, 0.7F, 9.5F, 0.052F, 0.209F, 0F, percentage);
+			entry.setTransforms(this.tail_base, 0.3F, 0.5F, 9.5F, -0.091F, 0.209F, 0F, percentage);
+			entry.setTransforms(this.body_base, -4.5F, 11.8F, 0F, 0F, -0.262F, 0F, percentage);
+		}
+
 	}
 }

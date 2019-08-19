@@ -1,8 +1,8 @@
 package com.terraformersmc.terrestrium.entities.crocodile;
 
 import com.sun.istack.internal.Nullable;
+import com.terraformersmc.terrestrium.ai.goals.CrocodileAttackGoal;
 import com.terraformersmc.terrestrium.entities.AnimatedEntityEntry;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
@@ -19,7 +19,6 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.FishEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -33,8 +32,9 @@ import net.minecraft.world.ViewableWorld;
 import net.minecraft.world.World;
 
 public class CrocodileEntity extends AnimalEntity {
-	protected AnimatedEntityEntry entry;
 
+	protected AnimatedEntityEntry entry;
+	private boolean targeting;
 
 	public CrocodileEntity(EntityType<? extends CrocodileEntity> entityType_1, World world_1) {
 		super(entityType_1, world_1);
@@ -49,7 +49,7 @@ public class CrocodileEntity extends AnimalEntity {
 	}
 
 	protected void initGoals() {
-		this.targetSelector.add(0, new MeleeAttackGoal(this, 20, true));
+		this.targetSelector.add(0, new CrocodileAttackGoal(this, 20, true));
 		this.targetSelector.add(1, new FollowTargetGoal<PlayerEntity>(this, PlayerEntity.class, true));
 		this.targetSelector.add(2, new FollowTargetGoal<FishEntity>(this, FishEntity.class, true));
 		this.goalSelector.add(3, new CrocodileEntity.WanderInWaterGoal(this, 1.0D, 100, this));
@@ -124,15 +124,6 @@ public class CrocodileEntity extends AnimalEntity {
 		return new CrocodileEntity.CrocodileSwimNavigation(this, world_1);
 	}
 
-	@Nullable
-	public PassiveEntity createChild(PassiveEntity passiveEntity_1) {
-		return (PassiveEntity)EntityType.TURTLE.create(this.world);
-	}
-
-	public boolean isBreedingItem(ItemStack itemStack_1) {
-		return itemStack_1.getItem() == Blocks.SEAGRASS.asItem();
-	}
-
 	public float getPathfindingFavor(BlockPos blockPos_1, ViewableWorld viewableWorld_1) {
 		if (viewableWorld_1.getFluidState(blockPos_1).matches(FluidTags.WATER)) {
 			return 10.0F;
@@ -141,15 +132,13 @@ public class CrocodileEntity extends AnimalEntity {
 		}
 	}
 
+	@Override
+	public PassiveEntity createChild(PassiveEntity passiveEntity) {
+		return null;
+	}
+
 	public void tickMovement() {
 		super.tickMovement();
-		if (this.isAlive()) {
-			BlockPos blockPos_1 = new BlockPos(this);
-			if (this.world.getBlockState(blockPos_1.down()).getBlock() == Blocks.SAND) {
-				this.world.playLevelEvent(2001, blockPos_1, Block.getRawIdFromState(Blocks.SAND.getDefaultState()));
-			}
-		}
-
 	}
 
 	public void travel(Vec3d vec3d_1) {
@@ -172,6 +161,14 @@ public class CrocodileEntity extends AnimalEntity {
 
 	public void onStruckByLightning(LightningEntity lightningEntity_1) {
 		this.damage(DamageSource.LIGHTNING_BOLT, 3.4028235E38F);
+	}
+
+	public boolean isTargeting() {
+		return targeting;
+	}
+
+	public void setTargeting(boolean targeting) {
+		this.targeting = targeting;
 	}
 
 	static class CrocodileSwimNavigation extends SwimNavigation {
