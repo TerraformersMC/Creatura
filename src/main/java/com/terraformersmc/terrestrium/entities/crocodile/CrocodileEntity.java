@@ -32,6 +32,8 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ViewableWorld;
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 public class CrocodileEntity extends AnimalEntity {
 
 	protected AnimatedEntityEntry entry;
@@ -187,6 +189,21 @@ public class CrocodileEntity extends AnimalEntity {
 		this.damage(DamageSource.LIGHTNING_BOLT, 3.4028235E38F);
 	}
 
+	@Override
+	public void tickMovement() {
+		super.tickMovement();
+		Random random = new Random();
+		if (this.isAngry() && this.isInsideWater()) {
+			this.world.addParticle(ParticleTypes.BUBBLE,
+				this.getPos().getX() + (this.getRotationVector().getX() * 2.5) + (random.nextDouble() - 0.5D),
+				this.getPos().getY() + (0.5 * (random.nextDouble() - 0.5D)),
+				this.getPos().getZ() + (this.getRotationVector().getZ() * 2.5 + (random.nextDouble() - 0.5D)),
+				this.getVelocity().getX() - 0.15,
+				this.getVelocity().getY() + 1.0D,
+				this.getVelocity().getZ() - 0.15);
+		}
+	}
+
 	static class CrocodileSwimNavigation extends SwimNavigation {
 		CrocodileSwimNavigation(CrocodileEntity crocodileEntity_1, World world_1) {
 			super(crocodileEntity_1, world_1);
@@ -239,15 +256,6 @@ public class CrocodileEntity extends AnimalEntity {
 				this.crocodile.setMovementSpeed(0.0F);
 			}
 			if (this.crocodile.isInsideWater()) {
-				if (this.crocodile.isAngry()) {
-					this.crocodile.getEntityWorld().addParticle(ParticleTypes.BUBBLE,
-						this.crocodile.getPos().getX(),
-						this.crocodile.getPos().getY(),
-						this.crocodile.getPos().getZ(),
-						this.crocodile.getVelocity().getX() - 0.15,
-						this.crocodile.getVelocity().getY() + 1.0D,
-						this.crocodile.getVelocity().getZ() - 0.15);
-				}
 				this.crocodile.navigation = this.crocodile.waterNavigation;
 			} else {
 				this.crocodile.navigation = this.crocodile.landNavigation;
