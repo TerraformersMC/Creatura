@@ -197,6 +197,7 @@ public class CrocodileModel extends AnimatedModel<CrocodileEntity> {
 	 * This method is generated from DumbCode Animation Studio v0.3.9
 	 */
 	private void playAnimationIdle(AnimatedEntityEntry entry, float ticksDone) {
+		ticksDone *= 0.6;
 		ticksDone %= 30;  //Comment this for the animation NOT to loop
 
 		int snapshotID;
@@ -230,7 +231,7 @@ public class CrocodileModel extends AnimatedModel<CrocodileEntity> {
 			entry.setTransforms(this.leg_left, 3F, 6F, -1F, 0.698F, 0F, -0.175F, percentage);
 			entry.setTransforms(this.leg_right, -3F, 6F, -1F, 0.698F, 0F, 0.349F, percentage);
 			entry.setTransforms(this.hip, 4.4F, 0.5F, 10F, -0.07F, 0F, 0F, percentage);
-			entry.setTransforms(this.body_base, -4.5F, 11.8F, 0F, 0F, 0F, 0F, percentage);
+			entry.setTransforms(this.body_base, -4.5F, 11.8F, 0F, 0F, -0.05F, 0F, percentage);
 		}
 		if (ticksDone > 15) {
 			float percentage = (ticksDone - 15F) / 15F;
@@ -242,6 +243,7 @@ public class CrocodileModel extends AnimatedModel<CrocodileEntity> {
 			entry.setTransforms(this.tail_base, 0.3F, 0.5F, 9.5F, -0.091F, 0.175F, 0F, percentage);
 			entry.setTransforms(this.leg_left, 3F, 6F, -1F, 0.698F, 0F, -0.349F, percentage);
 			entry.setTransforms(this.leg_right, -3F, 6F, -1F, 0.698F, 0F, 0.175F, percentage);
+			entry.setTransforms(this.body_base, -4.5F, 11.8F, 0F, 0F, 0.05F, 0F, percentage);
 		}
 	}
 
@@ -252,7 +254,7 @@ public class CrocodileModel extends AnimatedModel<CrocodileEntity> {
 	 * This method is generated from DumbCode Animation Studio v0.3.9
 	 */
 	private void playAnimationSwim(AnimatedEntityEntry entry, float ticksDone) {
-		ticksDone *= 1; //Speed of the animation
+		ticksDone *= 0.7; //Speed of the animation
 		ticksDone %= 10;  //Loop the animation
 
 		int snapshotID;
