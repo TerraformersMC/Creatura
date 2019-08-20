@@ -1,7 +1,6 @@
 package com.terraformersmc.terrestrium.entities.crocodile;
 
 import com.sun.istack.internal.Nullable;
-import com.terraformersmc.terrestrium.ai.goals.StopWanderingGoal;
 import com.terraformersmc.terrestrium.entities.AnimatedEntityEntry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -59,9 +58,9 @@ public class CrocodileEntity extends AnimalEntity {
 		this.targetSelector.add(2, new FollowTargetGoal<PlayerEntity>(this, PlayerEntity.class, true));
 		this.targetSelector.add(3, new FollowTargetGoal<FishEntity>(this, FishEntity.class, true));
 		this.goalSelector.add(1, new CrocodileEntity.WanderInWaterGoal(this, 1.0D, 100, this));
-		this.goalSelector.add(3, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
-		this.goalSelector.add(4, new WanderAroundFarGoal(this, this.getMovementSpeed()));
-		this.goalSelector.add(2, new StopWanderingGoal(this, 60));
+		this.goalSelector.add(3, new LookAtEntityGoal(this, PlayerEntity.class, 1.0F));
+		this.goalSelector.add(4, new WanderAroundFarGoal(this, 0.7D));
+		this.goalSelector.add(5, new LookAroundGoal(this));
 	}
 
 	protected void initAttributes() {
