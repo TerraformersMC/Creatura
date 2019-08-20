@@ -20,6 +20,7 @@ import net.minecraft.entity.passive.FishEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.tag.FluidTags;
@@ -238,6 +239,15 @@ public class CrocodileEntity extends AnimalEntity {
 				this.crocodile.setMovementSpeed(0.0F);
 			}
 			if (this.crocodile.isInsideWater()) {
+				if (this.crocodile.isAngry()) {
+					this.crocodile.getEntityWorld().addParticle(ParticleTypes.BUBBLE,
+						this.crocodile.getPos().getX(),
+						this.crocodile.getPos().getY(),
+						this.crocodile.getPos().getZ(),
+						this.crocodile.getVelocity().getX() - 0.15,
+						this.crocodile.getVelocity().getY() + 1.0D,
+						this.crocodile.getVelocity().getZ() - 0.15);
+				}
 				this.crocodile.navigation = this.crocodile.waterNavigation;
 			} else {
 				this.crocodile.navigation = this.crocodile.landNavigation;
