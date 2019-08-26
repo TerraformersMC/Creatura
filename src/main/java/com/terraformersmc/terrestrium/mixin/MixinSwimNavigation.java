@@ -30,7 +30,7 @@ public abstract class MixinSwimNavigation extends EntityNavigation {
 			}
 
 			Vec3d vec3d_3 = this.currentPath.getCurrentPosition();
-			if (Math.abs(this.entity.x - (vec3d_3.x - (this.entity.getWidth() + 1) / 2D)) < (double)float_2 && Math.abs(this.entity.z - (vec3d_3.z - (this.entity.getWidth() + 1) / 2D)) < (double)float_2 && Math.abs(this.entity.y - vec3d_3.y) < (double)(float_2 * 2.0F)) {
+			if (Math.abs(this.entity.x - (vec3d_3.x + (this.entity.getWidth() + 1) / 2D)) < (double)float_2 && Math.abs(this.entity.z - (vec3d_3.z + (this.entity.getWidth() + 1) / 2D)) < (double)float_2 && Math.abs(this.entity.y - vec3d_3.y) < (double)(float_2 * 2.0F)) {
 				this.currentPath.next();
 			}
 
