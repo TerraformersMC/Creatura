@@ -3,6 +3,8 @@
   "package": "com.terraformersmc.terrestrium.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "MixinEntityNavigation",
+    "MixinSwimNavigation"
   ],
   "injectors": {
     "defaultRequire": 1
