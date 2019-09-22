@@ -54,7 +54,7 @@ public class CrocodileEntity extends TerrestriumAmphibiousEntity {
 	protected void initAttributes() {
 		super.initAttributes();
 		this.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(30.0D);
-		this.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).setBaseValue(0.15D);
+		this.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).setBaseValue(0.1D);
 		this.getAttributeContainer().register(EntityAttributes.ATTACK_DAMAGE);
 		this.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE).setBaseValue(3.5D);
 	}
@@ -117,10 +117,6 @@ public class CrocodileEntity extends TerrestriumAmphibiousEntity {
 	protected void playStepSound(BlockPos blockPos_1, BlockState blockState_1) {
 		SoundEvent soundEvent_1 = SoundEvents.ENTITY_TURTLE_SHAMBLE;
 		this.playSound(soundEvent_1, 0.15F, 1.0F);
-	}
-
-	protected float calculateStepDelta() {
-		return this.distanceWalked + 0.15F;
 	}
 
 	public float getScaleFactor() {

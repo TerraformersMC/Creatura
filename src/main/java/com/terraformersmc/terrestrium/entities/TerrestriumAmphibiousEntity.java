@@ -13,18 +13,18 @@ import net.minecraft.world.World;
 
 public class TerrestriumAmphibiousEntity extends TerrestriumWaterMob {
 
-	public MobNavigation landNavigation;
+	public EntityNavigation landNavigation;
 	public SwimNavigation waterNavigation;
 
 	public TerrestriumAmphibiousEntity(EntityType<? extends TerrestriumWaterMob> entityType_1, World world_1) {
 		super(entityType_1, world_1);
 		this.waterNavigation = new AmphibiousSwimNavigation(this, world_1);
-		this.landNavigation = new MobNavigation(this, world_1);
+		this.landNavigation = super.createNavigation(world_1);
 		this.navigation = createNavigation(world_1);
 		this.moveControl = new AmphibiousMoveControl(this);
 	}
 
-	public void setNavigation(MobNavigation navigation) {
+	public void setNavigation(EntityNavigation navigation) {
 		this.navigation = navigation;
 	}
 
@@ -81,7 +81,7 @@ public class TerrestriumAmphibiousEntity extends TerrestriumWaterMob {
 			if (this.amphibiousEntity.isInsideWater()) {
 				this.amphibiousEntity.setVelocity(this.amphibiousEntity.getVelocity().add(0.0D, 0.005D, 0.0D));
 			} else if (this.amphibiousEntity.onGround) {
-				this.amphibiousEntity.setMovementSpeed(Math.max(this.amphibiousEntity.getMovementSpeed() / 1.5F, 0.4F));
+				this.amphibiousEntity.setMovementSpeed(Math.max(this.amphibiousEntity.getMovementSpeed() / 5.5F, 0.4F));
 			}
 		}
 
