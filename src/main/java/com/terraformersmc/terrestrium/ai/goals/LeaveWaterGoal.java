@@ -14,7 +14,7 @@ public class LeaveWaterGoal extends MoveToTargetPosGoal {
 	}
 
 	public boolean canStart() {
-		return super.canStart() && !this.waterMob.world.isDaylight() && this.waterMob.isInsideWater() && this.waterMob.y >= (double)(this.waterMob.world.getSeaLevel() - 3);
+		return super.canStart() && this.waterMob.isInsideWater() && this.waterMob.y >= (double)(this.waterMob.world.getSeaLevel() - 3);
 	}
 
 	public boolean shouldContinue() {
@@ -23,7 +23,7 @@ public class LeaveWaterGoal extends MoveToTargetPosGoal {
 
 	protected boolean isTargetPos(ViewableWorld viewableWorld_1, BlockPos blockPos_1) {
 		BlockPos blockPos_2 = blockPos_1.up();
-		return viewableWorld_1.isAir(blockPos_2) && viewableWorld_1.isAir(blockPos_2.up()) ? viewableWorld_1.getBlockState(blockPos_1).hasSolidTopSurface(viewableWorld_1, blockPos_1, this.waterMob) : false;
+		return (viewableWorld_1.isAir(blockPos_2) && viewableWorld_1.isAir(blockPos_2.up())) && viewableWorld_1.getBlockState(blockPos_1).hasSolidTopSurface(viewableWorld_1, blockPos_1, this.waterMob);
 	}
 
 	public void start() {

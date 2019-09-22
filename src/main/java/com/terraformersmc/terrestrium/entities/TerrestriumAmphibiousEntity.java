@@ -99,7 +99,7 @@ public class TerrestriumAmphibiousEntity extends TerrestriumWaterMob {
 				double x = this.targetX - this.amphibiousEntity.x;
 				double y = this.targetY - this.amphibiousEntity.y;
 				double z = this.targetZ - this.amphibiousEntity.z;
-				double distance = (double) MathHelper.sqrt(x * x + y * y + z * z);
+				double distance = MathHelper.sqrt(x * x + y * y + z * z);
 				y /= distance;
 				float float_1 = (float)(MathHelper.atan2(z, x) * 57.2957763671875D) - 90.0F;
 				this.amphibiousEntity.yaw = this.changeAngle(this.amphibiousEntity.yaw, float_1, 90.0F);

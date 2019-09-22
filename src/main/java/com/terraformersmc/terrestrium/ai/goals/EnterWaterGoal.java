@@ -1,49 +1,39 @@
 package com.terraformersmc.terrestrium.ai.goals;
 
-import com.terraformersmc.terrestrium.entities.TerrestriumWaterMob;
-import net.minecraft.entity.ai.PathfindingUtil;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.Vec3d;
+import com.terraformersmc.terrestrium.entities.TerrestriumAmphibiousEntity;
+import net.minecraft.entity.ai.goal.MoveToTargetPosGoal;
+import net.minecraft.entity.mob.MobEntityWithAi;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ViewableWorld;
 
-public class EnterWaterGoal extends Goal {
-	private TerrestriumWaterMob entity;
-	private double speed;
-	private int minY;
-	private boolean field_7248;
+public class EnterWaterGoal extends MoveToTargetPosGoal {
+	private TerrestriumAmphibiousEntity waterMob;
 
-	public EnterWaterGoal(TerrestriumWaterMob entity, double double_1, int int_1) {
-		this.entity = entity;
-		this.speed = double_1;
-		this.minY = int_1;
+	public EnterWaterGoal(MobEntityWithAi mobEntityWithAi_1, double double_1, int int_1) {
+		super(mobEntityWithAi_1, double_1, int_1);
 	}
 
 	public boolean canStart() {
-		return this.entity.isInsideWater() && this.entity.y < (double)(this.minY - 2);
+		return super.canStart()  && !this.waterMob.isInsideWater() && this.waterMob.y >= (double)(this.waterMob.world.getSeaLevel() - 3);
 	}
 
 	public boolean shouldContinue() {
-		return this.canStart() && !this.field_7248;
+		return super.shouldContinue();
 	}
 
-	public void tick() {
-		if (this.entity.y < (double)(this.minY - 1) && (this.entity.getNavigation().isIdle())) {
-			Vec3d vec3d_1 = PathfindingUtil.method_6373(this.entity, 4, 8, new Vec3d(this.entity.x, (double)(this.minY - 1), this.entity.z));
-			if (vec3d_1 == null) {
-				this.field_7248 = true;
-				return;
-			}
-
-			this.entity.getNavigation().startMovingTo(vec3d_1.x, vec3d_1.y, vec3d_1.z, this.speed);
-		}
-
+	@Override
+	protected boolean isTargetPos(ViewableWorld viewableWorld, BlockPos pos) {
+		BlockPos blockPos_2 = pos.up();
+		return (viewableWorld.isWaterAt(pos) && viewableWorld.isAir(blockPos_2.up())) && viewableWorld.getBlockState(pos).isTranslucent(viewableWorld, pos);
 	}
 
 	public void start() {
-		this.entity.setTargetingUnderwater(true);
-		this.field_7248 = false;
+		this.waterMob.setTargetingUnderwater(true);
+		this.waterMob.navigation = this.waterMob.landNavigation;
+		super.start();
 	}
 
 	public void stop() {
-		this.entity.setTargetingUnderwater(false);
+		super.stop();
 	}
 }
