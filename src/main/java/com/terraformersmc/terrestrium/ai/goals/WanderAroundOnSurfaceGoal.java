@@ -1,6 +1,5 @@
 package com.terraformersmc.terrestrium.ai.goals;
 
-import com.sun.istack.internal.Nullable;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.MobEntityWithAi;
@@ -52,7 +51,6 @@ public class WanderAroundOnSurfaceGoal extends Goal {
 		this.mob.getNavigation().startMovingTo(this.x, this.y, this.z, this.speed);
 	}
 
-	@Nullable
 	private Vec3d getWanderTarget() {
 		Random random_1 = this.mob.getRand();
 		BlockPos blockPos_1 = new BlockPos(this.mob.x, this.mob.getBoundingBox().minY, this.mob.z);

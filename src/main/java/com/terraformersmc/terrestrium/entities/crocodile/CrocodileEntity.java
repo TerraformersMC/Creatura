@@ -1,6 +1,5 @@
 package com.terraformersmc.terrestrium.entities.crocodile;
 
-import com.sun.istack.internal.Nullable;
 import com.terraformersmc.terrestrium.entities.AnimatedEntityEntry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -48,8 +47,7 @@ public class CrocodileEntity extends AnimalEntity {
 		this.landNavigation = new MobNavigation(this, world_1);
 	}
 
-	@Nullable
-	public EntityData initialize(IWorld iWorld_1, LocalDifficulty localDifficulty_1, SpawnType spawnType_1, @Nullable EntityData entityData_1, @Nullable CompoundTag compoundTag_1) {
+	public EntityData initialize(IWorld iWorld_1, LocalDifficulty localDifficulty_1, SpawnType spawnType_1, EntityData entityData_1, CompoundTag compoundTag_1) {
 		return super.initialize(iWorld_1, localDifficulty_1, spawnType_1, entityData_1, compoundTag_1);
 	}
 
@@ -77,7 +75,7 @@ public class CrocodileEntity extends AnimalEntity {
 	}
 
 	@Override
-	public void setTarget(@Nullable LivingEntity livingEntity_1) {
+	public void setTarget(LivingEntity livingEntity_1) {
 		super.setTarget(livingEntity_1);
 		if (livingEntity_1 == null) {
 			this.dataTracker.set(ANGRY, false);
@@ -110,7 +108,6 @@ public class CrocodileEntity extends AnimalEntity {
 		return 200;
 	}
 
-	@Nullable
 	protected SoundEvent getAmbientSound() {
 		return !this.isInsideWater() && this.onGround ? SoundEvents.ENTITY_TURTLE_AMBIENT_LAND : super.getAmbientSound();
 	}
@@ -123,12 +120,10 @@ public class CrocodileEntity extends AnimalEntity {
 		return SoundEvents.ENTITY_TURTLE_SWIM;
 	}
 
-	@Nullable
 	protected SoundEvent getHurtSound(DamageSource damageSource_1) {
 		return this.isBaby() ? SoundEvents.ENTITY_TURTLE_HURT_BABY : SoundEvents.ENTITY_TURTLE_HURT;
 	}
 
-	@Nullable
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_TURTLE_DEATH;
 	}
