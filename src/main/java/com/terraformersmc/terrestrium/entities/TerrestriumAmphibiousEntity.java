@@ -13,7 +13,6 @@ import net.minecraft.world.World;
 
 public class TerrestriumAmphibiousEntity extends TerrestriumWaterMob {
 
-	public EntityNavigation navigation;
 	public MobNavigation landNavigation;
 	public SwimNavigation waterNavigation;
 
@@ -25,9 +24,8 @@ public class TerrestriumAmphibiousEntity extends TerrestriumWaterMob {
 		this.moveControl = new AmphibiousMoveControl(this);
 	}
 
-	@Override
-	public void tickMovement() {
-		super.tickMovement();
+	public void setNavigation(MobNavigation navigation) {
+		this.navigation = navigation;
 	}
 
 	@Override

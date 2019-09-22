@@ -13,11 +13,6 @@ public class TerrestriumWaterMob extends MobEntityWithAi {
 		isTargetingUnderwater = false;
 	}
 
-	@Override
-	public void tickMovement() {
-		super.tickMovement();
-	}
-
 	public boolean isTargetingUnderwater() {
 		return isTargetingUnderwater;
 	}

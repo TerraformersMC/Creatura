@@ -29,7 +29,7 @@ public class EnterWaterGoal extends MoveToTargetPosGoal {
 
 	public void start() {
 		this.waterMob.setTargetingUnderwater(true);
-		this.waterMob.navigation = this.waterMob.landNavigation;
+		this.waterMob.setNavigation(this.waterMob.landNavigation);
 		super.start();
 	}
 
